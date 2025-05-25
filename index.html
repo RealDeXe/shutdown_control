@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contrôle PC - Arrêt sécurisé</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background-color: rgba(0,0,0,0.4);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      width: 200px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ff4d4d;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💻 Contrôle d'arrêt du PC</h1>
+    <input type="password" id="password" placeholder="Mot de passe secret" />
+    <br>
+    <button onclick="sendShutdown()">⛔ Envoyer l'arrêt</button>
+    <div class="message" id="msg"></div>
+  </div>
+
+  <script>
+    async function sendShutdown() {
+      const pwd = document.getElementById("password").value;
+      const msgBox = document.getElementById("msg");
+
+      const response = await fetch("shutdown.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "password=" + encodeURIComponent(pwd)
+      });
+
+      const text = await response.text();
+      msgBox.textContent = text;
+
+      if (text.includes("✅")) {
+        msgBox.style.color = "lightgreen";
+      } else {
+        msgBox.style.color = "yellow";
+      }
+    }
+  </script>
+</body>
+</html>
